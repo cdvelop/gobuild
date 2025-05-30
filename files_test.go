@@ -75,9 +75,8 @@ func TestRenameOutputFile(t *testing.T) {
 		t.Fatalf("Failed to create temp file: %v", err)
 	}
 	file.Close()
-
 	// Test the rename operation
-	err = gb.renameOutputFile()
+	err = gb.RenameOutputFile()
 	if err != nil {
 		t.Errorf("renameOutputFile failed: %v", err)
 	}
@@ -109,9 +108,8 @@ func TestRenameOutputFileNonexistentSource(t *testing.T) {
 	}
 
 	gb := New(config)
-
 	// Try to rename a file that doesn't exist
-	err = gb.renameOutputFile()
+	err = gb.RenameOutputFile()
 	if err == nil {
 		t.Error("Expected error when renaming nonexistent file, got nil")
 	}
@@ -130,21 +128,18 @@ func TestRenameOutputFileInvalidDestination(t *testing.T) {
 		Extension: ".exe",
 		OutFolder: "/nonexistent/path",
 	}
-
 	gb := New(config)
 
 	// Create a source file in temp directory but try to move to nonexistent destination
-	sourcePath := filepath.Join(tempDir, gb.outTempFileName)
+	tempFileName := "testapp_temp.exe"
+	sourcePath := filepath.Join(tempDir, tempFileName)
 	file, err := os.Create(sourcePath)
 	if err != nil {
 		t.Fatalf("Failed to create source file: %v", err)
 	}
 	file.Close()
 
-	// Update the temp file path for this test
-	gb.outTempFileName = sourcePath
-
-	err = gb.renameOutputFile()
+	err = gb.RenameOutputFileFrom(tempFileName)
 	if err == nil {
 		t.Error("Expected error when renaming to invalid destination, got nil")
 	}

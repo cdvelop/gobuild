@@ -14,14 +14,12 @@ func TestNew(t *testing.T) {
 		Extension:    ".exe",
 		OutFolder:    "build",
 	}
-
 	gb := New(config)
 
 	if gb == nil {
 		t.Fatal("New() returned nil")
 	}
-
-	if gb.Config != config {
+	if gb.config != config {
 		t.Error("Config not properly assigned")
 	}
 
@@ -32,10 +30,9 @@ func TestNew(t *testing.T) {
 	if gb.outTempFileName != "test_temp.exe" {
 		t.Errorf("Expected outTempFileName to be 'test_temp.exe', got '%s'", gb.outTempFileName)
 	}
-
 	// Test default timeout
-	if gb.Timeout != 5*time.Second {
-		t.Errorf("Expected default timeout to be 5 seconds, got %v", gb.Timeout)
+	if gb.config.Timeout != 5*time.Second {
+		t.Errorf("Expected default timeout to be 5 seconds, got %v", gb.config.Timeout)
 	}
 }
 
@@ -48,11 +45,9 @@ func TestNewWithCustomTimeout(t *testing.T) {
 		OutFolder:    "build",
 		Timeout:      10 * time.Second,
 	}
-
 	gb := New(config)
-
-	if gb.Timeout != 10*time.Second {
-		t.Errorf("Expected timeout to be 10 seconds, got %v", gb.Timeout)
+	if gb.config.Timeout != 10*time.Second {
+		t.Errorf("Expected timeout to be 10 seconds, got %v", gb.config.Timeout)
 	}
 }
 

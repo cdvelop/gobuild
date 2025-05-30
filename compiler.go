@@ -7,55 +7,65 @@ import (
 	"os/exec"
 	"path"
 	"strings"
+	"sync"
 )
 
+// synchronizedWriter wraps an io.Writer to make it safe for concurrent use
+type synchronizedWriter struct {
+	mu sync.Mutex
+	w  io.Writer
+}
+
+func (sw *synchronizedWriter) Write(p []byte) (n int, err error) {
+	sw.mu.Lock()
+	defer sw.mu.Unlock()
+	return sw.w.Write(p)
+}
+
 // compileSync performs the actual compilation synchronously with context timeout
-func (h *GoBuild) compileSync() error {
-	var this = errors.New("CompileProgram")
+func (h *GoBuild) compileSync(ctx context.Context, comp *compilation) error {
+	var this = errors.New("compileSync")
 
-	// Create context with timeout
-	ctx, cancel := context.WithTimeout(context.Background(), h.Timeout)
-	defer cancel()
+	buildArgs := h.buildArguments(comp.tempFile)
+	comp.cmd = exec.CommandContext(ctx, h.config.Command, buildArgs...)
 
-	buildArgs := h.buildArguments()
-	h.Cmd = exec.CommandContext(ctx, h.Command, buildArgs...)
-
-	stderr, err := h.Cmd.StderrPipe()
+	stderr, err := comp.cmd.StderrPipe()
 	if err != nil {
 		return errors.Join(this, err)
 	}
 
-	stdout, err := h.Cmd.StdoutPipe()
+	stdout, err := comp.cmd.StdoutPipe()
 	if err != nil {
 		return errors.Join(this, err)
 	}
-
-	err = h.Cmd.Start()
+	err = comp.cmd.Start()
 	if err != nil {
 		return errors.Join(this, err)
 	}
+	if h.config.Log != nil {
+		// Create a synchronized writer to handle concurrent stdout/stderr writes
+		syncWriter := &synchronizedWriter{w: h.config.Log}
 
-	if h.Log != nil {
-		go io.Copy(h.Log, stderr)
-		go io.Copy(h.Log, stdout)
+		go io.Copy(syncWriter, stderr)
+		go io.Copy(syncWriter, stdout)
 	}
 
-	if err := h.Cmd.Wait(); err != nil {
+	if err := comp.cmd.Wait(); err != nil {
 		// Clean up temporary file if compilation failed
-		h.cleanupTempFile()
+		h.cleanupTempFile(comp.tempFile)
 		return errors.Join(this, err)
 	}
 
-	return h.renameOutputFile()
+	return h.renameOutputFile(comp.tempFile)
 }
 
 // buildArguments constructs the command line arguments for go build
-func (h *GoBuild) buildArguments() []string {
+func (h *GoBuild) buildArguments(tempFileName string) []string {
 	buildArgs := []string{"build"}
 	ldFlags := []string{}
 
-	if h.CompilingArguments != nil {
-		args := h.CompilingArguments()
+	if h.config.CompilingArguments != nil {
+		args := h.config.CompilingArguments()
 		for i := 0; i < len(args); i++ {
 			arg := args[i]
 			if strings.HasPrefix(arg, "-X") {
@@ -81,6 +91,6 @@ func (h *GoBuild) buildArguments() []string {
 		buildArgs = append(buildArgs, "-ldflags="+strings.Join(ldFlags, " "))
 	}
 
-	buildArgs = append(buildArgs, "-o", path.Join(h.OutFolder, h.outTempFileName), h.MainFilePath)
+	buildArgs = append(buildArgs, "-o", path.Join(h.config.OutFolder, tempFileName), h.config.MainFilePath)
 	return buildArgs
 }

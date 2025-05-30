@@ -52,7 +52,7 @@ func TestBuildArguments(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			gb := New(tt.config)
-			args := gb.buildArguments()
+			args := gb.BuildArguments()
 
 			if len(args) != len(tt.expected) {
 				t.Errorf("Expected %d arguments, got %d. Expected: %v, Got: %v",
@@ -79,9 +79,8 @@ func TestCompileSyncWithInvalidCommand(t *testing.T) {
 		OutFolder:    "build",
 		Log:          &logOutput,
 	}
-
 	gb := New(config)
-	err := gb.compileSync()
+	err := gb.CompileProgram()
 
 	if err == nil {
 		t.Error("Expected error for nonexistent command, got nil")
@@ -110,7 +109,7 @@ func TestCompileSyncArgumentParsing(t *testing.T) {
 	}
 
 	gb := New(config)
-	args := gb.buildArguments()
+	args := gb.BuildArguments()
 	// Verify structure: build + regular args + ldflags + output + source
 	expectedStructure := []string{
 		"build",

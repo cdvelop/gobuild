@@ -16,10 +16,10 @@ func (h *GoBuild) UnobservedFiles() []string {
 }
 
 // renameOutputFile renames the temporary output file to the final output file
-func (h *GoBuild) renameOutputFile() error {
+func (h *GoBuild) renameOutputFile(tempFileName string) error {
 	err := os.Rename(
-		path.Join(h.OutFolder, h.outTempFileName),
-		path.Join(h.OutFolder, h.outFileName),
+		path.Join(h.config.OutFolder, tempFileName),
+		path.Join(h.config.OutFolder, h.outFileName),
 	)
 	if err != nil {
 		return errors.Join(errors.New("renameOutputFile"), err)
@@ -29,8 +29,8 @@ func (h *GoBuild) renameOutputFile() error {
 
 // cleanupTempFile removes the temporary output file if it exists
 // This is called when compilation fails to ensure no partial files remain
-func (h *GoBuild) cleanupTempFile() {
-	tempFilePath := path.Join(h.OutFolder, h.outTempFileName)
+func (h *GoBuild) cleanupTempFile(tempFileName string) {
+	tempFilePath := path.Join(h.config.OutFolder, tempFileName)
 	if _, err := os.Stat(tempFilePath); err == nil {
 		// File exists, try to remove it
 		os.Remove(tempFilePath)
