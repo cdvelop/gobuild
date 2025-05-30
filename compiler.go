@@ -41,6 +41,8 @@ func (h *GoBuild) compileSync() error {
 	}
 
 	if err := h.Cmd.Wait(); err != nil {
+		// Clean up temporary file if compilation failed
+		h.cleanupTempFile()
 		return errors.Join(this, err)
 	}
 

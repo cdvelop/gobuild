@@ -26,3 +26,15 @@ func (h *GoBuild) renameOutputFile() error {
 	}
 	return nil
 }
+
+// cleanupTempFile removes the temporary output file if it exists
+// This is called when compilation fails to ensure no partial files remain
+func (h *GoBuild) cleanupTempFile() {
+	tempFilePath := path.Join(h.OutFolder, h.outTempFileName)
+	if _, err := os.Stat(tempFilePath); err == nil {
+		// File exists, try to remove it
+		os.Remove(tempFilePath)
+		// We don't handle the error here as it's a cleanup operation
+		// and the main error (compilation failure) is more important
+	}
+}
