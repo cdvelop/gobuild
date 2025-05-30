@@ -590,7 +590,7 @@ func TestIntegrationRealScenarioFileModificationAndRecompilation(t *testing.T) {
 	}
 
 	mainGoPath := filepath.Join(tempDir, "main.go")
-	
+
 	// Step 1: Create initial valid Go program
 	initialContent := `package main
 
@@ -711,7 +711,7 @@ func TestIntegrationRealScenarioErrorHandlingAndCleanup(t *testing.T) {
 	}
 
 	mainGoPath := filepath.Join(tempDir, "main.go")
-	
+
 	// Step 1: Create a valid Go file first (to establish baseline)
 	validContent := `package main
 
@@ -801,7 +801,7 @@ func main() {
 			t.Fatalf("Failed to get current output file info: %v", err)
 		}
 		currentModTime := currentOutputInfo.ModTime()
-		
+
 		if !currentModTime.Equal(initialModTime) {
 			t.Errorf("Output file should not have been modified after failed compilation")
 			t.Errorf("Initial mod time: %v", initialModTime)
@@ -816,7 +816,7 @@ func main() {
 	if err != nil {
 		t.Fatalf("Failed to get hash of current source file: %v", err)
 	}
-	
+
 	if currentSourceHash == originalSourceHash {
 		t.Error("Source file should have been modified (this test modifies it to introduce errors)")
 	} else {
