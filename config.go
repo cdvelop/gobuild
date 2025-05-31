@@ -19,4 +19,5 @@ type Config struct {
 	Log                io.Writer       // output for log messages to integrate with other tools (e.g., TUI)
 	Callback           CompileCallback // optional callback for async compilation
 	Timeout            time.Duration   // max compilation time, defaults to 5 seconds if not set
+	Env                []string        // environment variables, eg: []string{"GOOS=js", "GOARCH=wasm"}
 }

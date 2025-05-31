@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"io"
+	"os"
 	"os/exec"
 	"path"
 	"strings"
@@ -25,9 +26,13 @@ func (sw *synchronizedWriter) Write(p []byte) (n int, err error) {
 // compileSync performs the actual compilation synchronously with context timeout
 func (h *GoBuild) compileSync(ctx context.Context, comp *compilation) error {
 	var this = errors.New("compileSync")
-
 	buildArgs := h.buildArguments(comp.tempFile)
 	comp.cmd = exec.CommandContext(ctx, h.config.Command, buildArgs...)
+
+	// Set environment variables if provided
+	if len(h.config.Env) > 0 {
+		comp.cmd.Env = append(os.Environ(), h.config.Env...)
+	}
 
 	stderr, err := comp.cmd.StderrPipe()
 	if err != nil {

@@ -142,3 +142,8 @@ func (h *GoBuild) RenameOutputFile() error {
 func (h *GoBuild) RenameOutputFileFrom(tempFileName string) error {
 	return h.renameOutputFile(tempFileName)
 }
+
+// MainOutputFileNameWithExtension returns the output filename with extension (e.g., "main.wasm", "app.exe")
+func (h *GoBuild) MainOutputFileNameWithExtension() string {
+	return h.outFileName
+}

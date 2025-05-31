@@ -63,6 +63,20 @@ type Config struct {
     CompilingArguments  func() []string // Build arguments (optional)
     Callback            func(error)     // Async callback (optional)
     Timeout             time.Duration   // Default: 5s
+    Env                 []string        // Environment variables (optional)
+}
+```
+
+## Environment Variables
+
+```go
+config := &gobuild.Config{
+    Command:      "go",
+    MainFilePath: "main.go",
+    OutName:      "app",
+    Extension:    ".wasm",
+    OutFolder:    "dist",
+    Env:          []string{"GOOS=js", "GOARCH=wasm"}, // For WASM compilation
 }
 ```
 
@@ -71,6 +85,7 @@ type Config struct {
 - `CompileProgram() error` - Compile (sync/async based on callback)
 - `Cancel() error` - Cancel current compilation
 - `IsCompiling() bool` - Check if compilation is active
+- `MainOutputFileNameWithExtension() string` - Get output filename with extension (e.g., "main.wasm")
 
 ## Features
 
