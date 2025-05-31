@@ -6,6 +6,7 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+	"runtime"
 	"testing"
 	"time"
 )
@@ -304,7 +305,7 @@ func main() {
 // Helper functions
 
 func getExecutableExtension() string {
-	if os.Getenv("GOOS") == "windows" {
+	if runtime.GOOS == "windows" {
 		return ".exe"
 	}
 	return ""
