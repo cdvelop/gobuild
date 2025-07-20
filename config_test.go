@@ -17,7 +17,7 @@ func TestConfig(t *testing.T) {
 		Extension:          ".exe",
 		CompilingArguments: func() []string { return []string{"-X", "main.version=v1.0.0"} },
 		OutFolder:          "dist",
-		Log:                &logOutput,
+		Writer:             &logOutput,
 		Callback: func(err error) {
 			callbackCalled = true
 		},
@@ -44,8 +44,8 @@ func TestConfig(t *testing.T) {
 		t.Errorf("Expected OutFolder to be 'dist', got '%s'", config.OutFolder)
 	}
 
-	if config.Log != &logOutput {
-		t.Error("Log writer not properly assigned")
+	if config.Writer != &logOutput {
+		t.Error("Writer not properly assigned")
 	}
 
 	if config.Callback == nil {

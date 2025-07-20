@@ -47,9 +47,9 @@ func (h *GoBuild) compileSync(ctx context.Context, comp *compilation) error {
 	if err != nil {
 		return errors.Join(this, err)
 	}
-	if h.config.Log != nil {
+	if h.config.Writer != nil {
 		// Create a synchronized writer to handle concurrent stdout/stderr writes
-		syncWriter := &synchronizedWriter{w: h.config.Log}
+		syncWriter := &synchronizedWriter{w: h.config.Writer}
 
 		go io.Copy(syncWriter, stderr)
 		go io.Copy(syncWriter, stdout)
