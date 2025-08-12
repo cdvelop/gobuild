@@ -95,3 +95,6 @@ config := &gobuild.Config{
 - **Thread-safe**: Automatic cancellation of previous compilations
 - **Unique temp files**: Prevents conflicts during concurrent builds
 - **Context-aware**: Proper cancellation and timeout handling
+
+---
+## [Contributing](docs/CONTRIBUTING.md)

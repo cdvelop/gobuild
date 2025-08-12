@@ -147,3 +147,8 @@ func (h *GoBuild) RenameOutputFileFrom(tempFileName string) error {
 func (h *GoBuild) MainOutputFileNameWithExtension() string {
 	return h.outFileName
 }
+
+// MainFilePath eg: cmd/main.go
+func (h *GoBuild) MainFilePath() string {
+	return h.config.MainFilePath
+}
