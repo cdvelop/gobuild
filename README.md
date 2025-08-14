@@ -20,7 +20,7 @@ config := &gobuild.Config{
     OutName:      "app",
     Extension:    ".exe",         // ".wasm" for WASM, "" for Unix
     OutFolder:    "dist",
-    Writer:       os.Stdout,
+    Logger:       os.Stdout,
     Timeout:      5 * time.Second,
 }
 
@@ -62,7 +62,7 @@ type Config struct {
     OutName             string          // Output name (without extension)
     Extension           string          // ".exe", ".wasm", ""
     OutFolder           string          // Output directory
-    Writer              io.Writer       // Output writer (optional)
+    Logger              io.Writer       // Output writer (optional)
     CompilingArguments  func() []string // Build arguments (optional)
     Callback            func(error)     // Async callback (optional)
     Timeout             time.Duration   // Default: 5s

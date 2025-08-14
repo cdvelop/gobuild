@@ -43,7 +43,7 @@ func main() {
 		OutName:      "raceapp",
 		Extension:    getExecutableExtension(),
 		OutFolder:    outputDir,
-		Writer:       &logOutput,
+		Logger:       &logOutput,
 		Timeout:      30 * time.Second,
 	}
 

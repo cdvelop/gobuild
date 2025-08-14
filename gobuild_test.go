@@ -59,7 +59,7 @@ func TestCompileProgramSync(t *testing.T) {
 		OutName:      "test",
 		Extension:    "",
 		OutFolder:    ".",
-		Writer:       &logOutput,
+		Logger:       &logOutput,
 		Timeout:      1 * time.Second,
 	}
 
@@ -85,7 +85,7 @@ func TestCompileProgramAsync(t *testing.T) {
 		OutName:      "test",
 		Extension:    "",
 		OutFolder:    ".",
-		Writer:       &logOutput,
+		Logger:       &logOutput,
 		Timeout:      1 * time.Second,
 		Callback: func(err error) {
 			callbackCalled <- err

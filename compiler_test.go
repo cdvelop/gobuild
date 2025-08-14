@@ -77,7 +77,7 @@ func TestCompileSyncWithInvalidCommand(t *testing.T) {
 		OutName:      "test",
 		Extension:    ".exe",
 		OutFolder:    "build",
-		Writer:       &logOutput,
+		Logger:       &logOutput,
 	}
 	gb := New(config)
 	err := gb.CompileProgram()
