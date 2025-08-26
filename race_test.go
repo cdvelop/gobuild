@@ -1,7 +1,7 @@
 package gobuild
 
 import (
-	"bytes"
+	"io"
 	"os"
 	"path/filepath"
 	"sync"
@@ -36,14 +36,13 @@ func main() {
 		t.Fatalf("Failed to create output directory: %v", err)
 	}
 
-	var logOutput bytes.Buffer
 	config := &Config{
 		Command:      "go",
 		MainFilePath: mainGoPath,
 		OutName:      "raceapp",
 		Extension:    getExecutableExtension(),
 		OutFolder:    outputDir,
-		Logger:       &logOutput,
+		Logger:       io.Discard,
 		Timeout:      30 * time.Second,
 	}
 
@@ -130,6 +129,7 @@ func main() {
 		OutName:      "cancelapp",
 		Extension:    getExecutableExtension(),
 		OutFolder:    outputDir,
+		Logger:       io.Discard,
 		Timeout:      30 * time.Second,
 	}
 
@@ -197,6 +197,7 @@ func main() {
 		OutName:      "stateapp",
 		Extension:    getExecutableExtension(),
 		OutFolder:    outputDir,
+		Logger:       io.Discard,
 		Timeout:      30 * time.Second,
 	}
 
@@ -266,6 +267,7 @@ func main() {
 		OutName:      "asyncraceapp",
 		Extension:    getExecutableExtension(),
 		OutFolder:    outputDir,
+		Logger:       io.Discard,
 		Timeout:      30 * time.Second,
 		Callback: func(err error) {
 			results <- err
