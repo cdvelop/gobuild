@@ -2,6 +2,7 @@ package gobuild
 
 import (
 	"errors"
+	"fmt"
 	"os"
 	"path"
 )
@@ -17,13 +18,19 @@ func (h *GoBuild) UnobservedFiles() []string {
 
 // renameOutputFile renames the temporary output file to the final output file
 func (h *GoBuild) renameOutputFile(tempFileName string) error {
-	err := os.Rename(
-		path.Join(h.config.OutFolder, tempFileName),
-		path.Join(h.config.OutFolder, h.outFileName),
-	)
+	tempPath := path.Join(h.config.OutFolder, tempFileName)
+	finalPath := path.Join(h.config.OutFolder, h.outFileName)
+
+	// fmt.Fprintf(h.config.Logger, "Renaming %s to %s\n", tempPath, finalPath)
+
+	err := os.Rename(tempPath, finalPath)
 	if err != nil {
+		fmt.Fprintf(h.config.Logger, "Rename failed: %v\n", err)
 		return errors.Join(errors.New("renameOutputFile"), err)
 	}
+
+	// fmt.Fprintf(h.config.Logger, "Rename successful\n")
+
 	return nil
 }
 

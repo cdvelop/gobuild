@@ -3,63 +3,50 @@ package gobuild
 import (
 	"context"
 	"errors"
-	"io"
+	"fmt"
 	"os"
 	"os/exec"
 	"path"
 	"strings"
-	"sync"
 )
-
-// synchronizedWriter wraps an io.Writer to make it safe for concurrent use
-type synchronizedWriter struct {
-	mu sync.Mutex
-	w  io.Writer
-}
-
-func (sw *synchronizedWriter) Write(p []byte) (n int, err error) {
-	sw.mu.Lock()
-	defer sw.mu.Unlock()
-	return sw.w.Write(p)
-}
 
 // compileSync performs the actual compilation synchronously with context timeout
 func (h *GoBuild) compileSync(ctx context.Context, comp *compilation) error {
 	var this = errors.New("compileSync")
+
 	buildArgs := h.buildArguments(comp.tempFile)
+
 	comp.cmd = exec.CommandContext(ctx, h.config.Command, buildArgs...)
+
+	// Set working directory to output folder for relative paths
+	comp.cmd.Dir = h.config.OutFolder
 
 	// Set environment variables if provided
 	if len(h.config.Env) > 0 {
 		comp.cmd.Env = append(os.Environ(), h.config.Env...)
 	}
 
-	stderr, err := comp.cmd.StderrPipe()
-	if err != nil {
-		return errors.Join(this, err)
-	}
+	// Use CombinedOutput for simpler and more reliable error capture
+	output, err := comp.cmd.CombinedOutput()
 
-	stdout, err := comp.cmd.StdoutPipe()
 	if err != nil {
-		return errors.Join(this, err)
-	}
-	err = comp.cmd.Start()
-	if err != nil {
-		return errors.Join(this, err)
-	}
-	if h.config.Logger != nil {
-		// Create a synchronized writer to handle concurrent stdout/stderr writes
-		syncWriter := &synchronizedWriter{w: h.config.Logger}
+		// Emit a single log entry containing the error and the raw build output (no processing)
+		if h.config.Logger != nil {
+			if len(output) > 0 {
+				fmt.Fprintf(h.config.Logger, "%v build failed: %v\n%s\n", this, err, string(output))
+			} else {
+				fmt.Fprintf(h.config.Logger, "%v build failed: %v\n", this, err)
+			}
+		}
 
-		go io.Copy(syncWriter, stderr)
-		go io.Copy(syncWriter, stdout)
-	}
-
-	if err := comp.cmd.Wait(); err != nil {
 		// Clean up temporary file if compilation failed
 		h.cleanupTempFile(comp.tempFile)
-		return errors.Join(this, err)
+
+		// Return an error that contains both the original error and the raw build output
+		return errors.Join(this, fmt.Errorf("%v: %s", err, strings.TrimSpace(string(output))))
 	}
+
+	// fmt.Fprintf(h.config.Logger, "Compilation successful, renaming %s\n", comp.tempFile)
 
 	return h.renameOutputFile(comp.tempFile)
 }
