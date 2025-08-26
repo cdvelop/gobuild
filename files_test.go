@@ -1,6 +1,7 @@
 package gobuild
 
 import (
+	"io"
 	"os"
 	"path/filepath"
 	"testing"
@@ -10,6 +11,7 @@ func TestUnobservedFiles(t *testing.T) {
 	config := &Config{
 		OutName:   "myapp",
 		Extension: ".exe",
+		Logger:    io.Discard,
 	}
 
 	gb := New(config)
@@ -33,6 +35,7 @@ func TestUnobservedFilesWithoutExtension(t *testing.T) {
 	config := &Config{
 		OutName:   "myapp",
 		Extension: "",
+		Logger:    io.Discard,
 	}
 
 	gb := New(config)
@@ -64,6 +67,7 @@ func TestRenameOutputFile(t *testing.T) {
 		OutName:   "testapp",
 		Extension: ".exe",
 		OutFolder: tempDir,
+		Logger:    io.Discard,
 	}
 
 	gb := New(config)
@@ -105,6 +109,7 @@ func TestRenameOutputFileNonexistentSource(t *testing.T) {
 		OutName:   "testapp",
 		Extension: ".exe",
 		OutFolder: tempDir,
+		Logger:    io.Discard,
 	}
 
 	gb := New(config)
@@ -127,6 +132,7 @@ func TestRenameOutputFileInvalidDestination(t *testing.T) {
 		OutName:   "testapp",
 		Extension: ".exe",
 		OutFolder: "/nonexistent/path",
+		Logger:    io.Discard,
 	}
 	gb := New(config)
 
