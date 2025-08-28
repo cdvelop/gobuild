@@ -64,10 +64,10 @@ func TestRenameOutputFile(t *testing.T) {
 	defer os.RemoveAll(tempDir)
 
 	config := &Config{
-		OutName:   "testapp",
-		Extension: ".exe",
-		OutFolder: tempDir,
-		Logger:    io.Discard,
+		OutName:               "testapp",
+		Extension:             ".exe",
+		OutFolderRelativePath: tempDir,
+		Logger:                io.Discard,
 	}
 
 	gb := New(config)
@@ -106,10 +106,10 @@ func TestRenameOutputFileNonexistentSource(t *testing.T) {
 	defer os.RemoveAll(tempDir)
 
 	config := &Config{
-		OutName:   "testapp",
-		Extension: ".exe",
-		OutFolder: tempDir,
-		Logger:    io.Discard,
+		OutName:               "testapp",
+		Extension:             ".exe",
+		OutFolderRelativePath: tempDir,
+		Logger:                io.Discard,
 	}
 
 	gb := New(config)
@@ -129,10 +129,10 @@ func TestRenameOutputFileInvalidDestination(t *testing.T) {
 	defer os.RemoveAll(tempDir)
 
 	config := &Config{
-		OutName:   "testapp",
-		Extension: ".exe",
-		OutFolder: "/nonexistent/path",
-		Logger:    io.Discard,
+		OutName:               "testapp",
+		Extension:             ".exe",
+		OutFolderRelativePath: "/nonexistent/path",
+		Logger:                io.Discard,
 	}
 	gb := New(config)
 

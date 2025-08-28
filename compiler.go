@@ -19,7 +19,7 @@ func (h *GoBuild) compileSync(ctx context.Context, comp *compilation) error {
 	comp.cmd = exec.CommandContext(ctx, h.config.Command, buildArgs...)
 
 	// Set working directory to output folder for relative paths
-	comp.cmd.Dir = h.config.OutFolder
+	comp.cmd.Dir = h.config.OutFolderRelativePath
 
 	// Set environment variables if provided
 	if len(h.config.Env) > 0 {
@@ -83,6 +83,6 @@ func (h *GoBuild) buildArguments(tempFileName string) []string {
 		buildArgs = append(buildArgs, "-ldflags="+strings.Join(ldFlags, " "))
 	}
 
-	buildArgs = append(buildArgs, "-o", path.Join(h.config.OutFolder, tempFileName), h.config.MainFilePath)
+	buildArgs = append(buildArgs, "-o", path.Join(h.config.OutFolderRelativePath, tempFileName), h.config.MainFileRelativePath)
 	return buildArgs
 }

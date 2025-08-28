@@ -14,20 +14,20 @@ func TestBuildArguments(t *testing.T) {
 		{
 			name: "basic build arguments",
 			config: &Config{
-				MainFilePath: "main.go",
-				OutFolder:    "build",
-				OutName:      "app",
-				Extension:    ".exe",
+				MainFileRelativePath:  "main.go",
+				OutFolderRelativePath: "build",
+				OutName:               "app",
+				Extension:             ".exe",
 			},
 			expected: []string{"build", "-o", "build/app_temp.exe", "main.go"},
 		},
 		{
 			name: "with ldflags",
 			config: &Config{
-				MainFilePath: "main.go",
-				OutFolder:    "build",
-				OutName:      "app",
-				Extension:    ".exe",
+				MainFileRelativePath:  "main.go",
+				OutFolderRelativePath: "build",
+				OutName:               "app",
+				Extension:             ".exe",
 				CompilingArguments: func() []string {
 					return []string{"-X", "main.version=v1.0.0"}
 				},
@@ -37,10 +37,10 @@ func TestBuildArguments(t *testing.T) {
 		{
 			name: "with regular arguments and ldflags",
 			config: &Config{
-				MainFilePath: "main.go",
-				OutFolder:    "build",
-				OutName:      "app",
-				Extension:    ".exe",
+				MainFileRelativePath:  "main.go",
+				OutFolderRelativePath: "build",
+				OutName:               "app",
+				Extension:             ".exe",
 				CompilingArguments: func() []string {
 					return []string{"-v", "-X", "main.version=v1.0.0", "-tags", "prod"}
 				},
@@ -72,12 +72,12 @@ func TestBuildArguments(t *testing.T) {
 func TestCompileSyncWithInvalidCommand(t *testing.T) {
 	var logOutput bytes.Buffer
 	config := &Config{
-		Command:      "nonexistentcommand",
-		MainFilePath: "main.go",
-		OutName:      "test",
-		Extension:    ".exe",
-		OutFolder:    "build",
-		Logger:       &logOutput,
+		Command:               "nonexistentcommand",
+		MainFileRelativePath:  "main.go",
+		OutName:               "test",
+		Extension:             ".exe",
+		OutFolderRelativePath: "build",
+		Logger:                &logOutput,
 	}
 	gb := New(config)
 	err := gb.CompileProgram()
@@ -93,10 +93,10 @@ func TestCompileSyncWithInvalidCommand(t *testing.T) {
 
 func TestCompileSyncArgumentParsing(t *testing.T) {
 	config := &Config{
-		MainFilePath: "main.go",
-		OutName:      "test",
-		Extension:    "",
-		OutFolder:    ".",
+		MainFileRelativePath:  "main.go",
+		OutName:               "test",
+		Extension:             "",
+		OutFolderRelativePath: ".",
 		CompilingArguments: func() []string {
 			return []string{
 				"-v",                    // regular argument

@@ -14,14 +14,27 @@ go get github.com/cdvelop/gobuild
 ## Quick Start
 
 ```go
-config := &gobuild.Config{
-    Command:      "go",           // or "tinygo"
-    MainFilePath: "main.go",
-    OutName:      "app",
-    Extension:    ".exe",         // ".wasm" for WASM, "" for Unix
-    OutFolder:    "dist",
-    Logger:       os.Stdout,
-    Timeout:      5 * time.Second,
+type Config struct {
+    Command               string          // "go" or "tinygo"
+    MainFileRelativePath  string          // relative Path to main.go
+    OutName               string          // Output name (without extension)
+    Extension             string          // ".exe", ".wasm", ""
+    OutFolderRelativePath string          // relative Output directory
+    Logger                io.Writer       // Output writer (optional)
+    CompilingArguments    func() []string // Build arguments (optional)
+    Callback              func(error)     // Async callback (optional)
+    Timeout               time.Duration   // Default: 5s
+    Env                   []string        // Environment variables (optional)
+}
+config := &Config{
+    Command:               "go",
+    MainFileRelativePath:  "server/main.go",
+    OutName:               "app",
+    Extension:             ".exe",
+    OutFolderRelativePath: "dist",
+    Logger:                os.Stdout,
+    Timeout:               5 * time.Second,
+    Env:                   []string{"GOOS=js", "GOARCH=wasm"}, // For WASM compilation
 }
 
 compiler := gobuild.New(config)
@@ -53,35 +66,6 @@ if compiler.IsCompiling() {
 }
 ```
 
-## Configuration
-
-```go
-type Config struct {
-    Command             string          // "go" or "tinygo"
-    MainFilePath        string          // Path to main.go
-    OutName             string          // Output name (without extension)
-    Extension           string          // ".exe", ".wasm", ""
-    OutFolder           string          // Output directory
-    Logger              io.Writer       // Output writer (optional)
-    CompilingArguments  func() []string // Build arguments (optional)
-    Callback            func(error)     // Async callback (optional)
-    Timeout             time.Duration   // Default: 5s
-    Env                 []string        // Environment variables (optional)
-}
-```
-
-## Environment Variables
-
-```go
-config := &gobuild.Config{
-    Command:      "go",
-    MainFilePath: "main.go",
-    OutName:      "app",
-    Extension:    ".wasm",
-    OutFolder:    "dist",
-    Env:          []string{"GOOS=js", "GOARCH=wasm"}, // For WASM compilation
-}
-```
 
 ## Methods
 

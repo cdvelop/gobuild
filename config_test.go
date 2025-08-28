@@ -11,13 +11,13 @@ func TestConfig(t *testing.T) {
 	callbackCalled := false
 
 	config := &Config{
-		Command:            "go",
-		MainFilePath:       "web/main.go",
-		OutName:            "myapp",
-		Extension:          ".exe",
-		CompilingArguments: func() []string { return []string{"-X", "main.version=v1.0.0"} },
-		OutFolder:          "dist",
-		Logger:             &logOutput,
+		Command:               "go",
+		MainFileRelativePath:  "web/main.go",
+		OutName:               "myapp",
+		Extension:             ".exe",
+		CompilingArguments:    func() []string { return []string{"-X", "main.version=v1.0.0"} },
+		OutFolderRelativePath: "dist",
+		Logger:                &logOutput,
 		Callback: func(err error) {
 			callbackCalled = true
 		},
@@ -28,8 +28,8 @@ func TestConfig(t *testing.T) {
 		t.Errorf("Expected Command to be 'go', got '%s'", config.Command)
 	}
 
-	if config.MainFilePath != "web/main.go" {
-		t.Errorf("Expected MainFilePath to be 'web/main.go', got '%s'", config.MainFilePath)
+	if config.MainFileRelativePath != "web/main.go" {
+		t.Errorf("Expected MainFileRelativePath to be 'web/main.go', got '%s'", config.MainFileRelativePath)
 	}
 
 	if config.OutName != "myapp" {
@@ -40,8 +40,8 @@ func TestConfig(t *testing.T) {
 		t.Errorf("Expected Extension to be '.exe', got '%s'", config.Extension)
 	}
 
-	if config.OutFolder != "dist" {
-		t.Errorf("Expected OutFolder to be 'dist', got '%s'", config.OutFolder)
+	if config.OutFolderRelativePath != "dist" {
+		t.Errorf("Expected OutFolderRelativePath to be 'dist', got '%s'", config.OutFolderRelativePath)
 	}
 
 	if config.Logger != &logOutput {

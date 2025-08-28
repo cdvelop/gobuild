@@ -41,12 +41,12 @@ func main() {
 	}
 
 	config := &Config{
-		Command:      "go",
-		MainFilePath: mainGoPath,
-		OutName:      "testapp",
-		Extension:    getExecutableExtension(),
-		OutFolder:    outputDir,
-		Timeout:      30 * time.Second,
+		Command:               "go",
+		MainFileRelativePath:  mainGoPath,
+		OutName:               "testapp",
+		Extension:             getExecutableExtension(),
+		OutFolderRelativePath: outputDir,
+		Timeout:               30 * time.Second,
 	}
 
 	compiler := New(config)
@@ -143,12 +143,12 @@ func main() {
 	}
 
 	config := &Config{
-		Command:      "go",
-		MainFilePath: mainGoPath,
-		OutName:      "testapp",
-		Extension:    getExecutableExtension(),
-		OutFolder:    outputDir,
-		Timeout:      30 * time.Second,
+		Command:               "go",
+		MainFileRelativePath:  mainGoPath,
+		OutName:               "testapp",
+		Extension:             getExecutableExtension(),
+		OutFolderRelativePath: outputDir,
+		Timeout:               30 * time.Second,
 	}
 
 	compiler := New(config)
@@ -258,12 +258,12 @@ func main() {
 	done := make(chan error, 1)
 
 	config := &Config{
-		Command:      "go",
-		MainFilePath: mainGoPath,
-		OutName:      "asyncapp",
-		Extension:    getExecutableExtension(),
-		OutFolder:    outputDir,
-		Timeout:      30 * time.Second,
+		Command:               "go",
+		MainFileRelativePath:  mainGoPath,
+		OutName:               "asyncapp",
+		Extension:             getExecutableExtension(),
+		OutFolderRelativePath: outputDir,
+		Timeout:               30 * time.Second,
 		Callback: func(err error) {
 			done <- err
 		},
@@ -355,12 +355,12 @@ func main() {
 	}
 
 	config := &Config{
-		Command:      "go",
-		MainFilePath: mainGoPath,
-		OutName:      "errorapp",
-		Extension:    getExecutableExtension(),
-		OutFolder:    outputDir,
-		Timeout:      30 * time.Second,
+		Command:               "go",
+		MainFileRelativePath:  mainGoPath,
+		OutName:               "errorapp",
+		Extension:             getExecutableExtension(),
+		OutFolderRelativePath: outputDir,
+		Timeout:               30 * time.Second,
 	}
 
 	compiler := New(config)
@@ -416,12 +416,12 @@ func main() {
 	}
 
 	config := &Config{
-		Command:      "go",
-		MainFilePath: mainGoPath,
-		OutName:      "quickapp",
-		Extension:    getExecutableExtension(),
-		OutFolder:    outputDir,
-		Timeout:      100 * time.Millisecond, // Very short timeout to test timeout handling
+		Command:               "go",
+		MainFileRelativePath:  mainGoPath,
+		OutName:               "quickapp",
+		Extension:             getExecutableExtension(),
+		OutFolderRelativePath: outputDir,
+		Timeout:               100 * time.Millisecond, // Very short timeout to test timeout handling
 	}
 
 	compiler := New(config)
@@ -472,12 +472,12 @@ func TestIntegrationMultipleSuccessiveCompilations(t *testing.T) {
 	mainGoPath := filepath.Join(tempDir, "main.go")
 
 	config := &Config{
-		Command:      "go",
-		MainFilePath: mainGoPath,
-		OutName:      "successiveapp",
-		Extension:    getExecutableExtension(),
-		OutFolder:    outputDir,
-		Timeout:      30 * time.Second,
+		Command:               "go",
+		MainFileRelativePath:  mainGoPath,
+		OutName:               "successiveapp",
+		Extension:             getExecutableExtension(),
+		OutFolderRelativePath: outputDir,
+		Timeout:               30 * time.Second,
 	}
 
 	compiler := New(config)
@@ -607,12 +607,12 @@ func main() {
 	}
 
 	config := &Config{
-		Command:      "go",
-		MainFilePath: mainGoPath,
-		OutName:      "myapp",
-		Extension:    getExecutableExtension(),
-		OutFolder:    outputDir,
-		Timeout:      30 * time.Second,
+		Command:               "go",
+		MainFileRelativePath:  mainGoPath,
+		OutName:               "myapp",
+		Extension:             getExecutableExtension(),
+		OutFolderRelativePath: outputDir,
+		Timeout:               30 * time.Second,
 	}
 
 	gb := New(config)
@@ -734,12 +734,12 @@ func main() {
 	t.Logf("Original source file hash: %s", originalSourceHash)
 
 	config := &Config{
-		Command:      "go",
-		MainFilePath: mainGoPath,
-		OutName:      "errorapp",
-		Extension:    getExecutableExtension(),
-		OutFolder:    outputDir,
-		Timeout:      30 * time.Second,
+		Command:               "go",
+		MainFileRelativePath:  mainGoPath,
+		OutName:               "errorapp",
+		Extension:             getExecutableExtension(),
+		OutFolderRelativePath: outputDir,
+		Timeout:               30 * time.Second,
 	}
 
 	gb := New(config)

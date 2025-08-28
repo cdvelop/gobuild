@@ -37,13 +37,13 @@ func main() {
 	}
 
 	config := &Config{
-		Command:      "go",
-		MainFilePath: mainGoPath,
-		OutName:      "raceapp",
-		Extension:    getExecutableExtension(),
-		OutFolder:    outputDir,
-		Logger:       io.Discard,
-		Timeout:      30 * time.Second,
+		Command:               "go",
+		MainFileRelativePath:  mainGoPath,
+		OutName:               "raceapp",
+		Extension:             getExecutableExtension(),
+		OutFolderRelativePath: outputDir,
+		Logger:                io.Discard,
+		Timeout:               30 * time.Second,
 	}
 
 	compiler := New(config)
@@ -124,13 +124,13 @@ func main() {
 	}
 
 	config := &Config{
-		Command:      "go",
-		MainFilePath: mainGoPath,
-		OutName:      "cancelapp",
-		Extension:    getExecutableExtension(),
-		OutFolder:    outputDir,
-		Logger:       io.Discard,
-		Timeout:      30 * time.Second,
+		Command:               "go",
+		MainFileRelativePath:  mainGoPath,
+		OutName:               "cancelapp",
+		Extension:             getExecutableExtension(),
+		OutFolderRelativePath: outputDir,
+		Logger:                io.Discard,
+		Timeout:               30 * time.Second,
 	}
 
 	compiler := New(config)
@@ -192,13 +192,13 @@ func main() {
 	}
 
 	config := &Config{
-		Command:      "go",
-		MainFilePath: mainGoPath,
-		OutName:      "stateapp",
-		Extension:    getExecutableExtension(),
-		OutFolder:    outputDir,
-		Logger:       io.Discard,
-		Timeout:      30 * time.Second,
+		Command:               "go",
+		MainFileRelativePath:  mainGoPath,
+		OutName:               "stateapp",
+		Extension:             getExecutableExtension(),
+		OutFolderRelativePath: outputDir,
+		Logger:                io.Discard,
+		Timeout:               30 * time.Second,
 	}
 
 	compiler := New(config)
@@ -262,13 +262,13 @@ func main() {
 	results := make(chan error, 10)
 
 	config := &Config{
-		Command:      "go",
-		MainFilePath: mainGoPath,
-		OutName:      "asyncraceapp",
-		Extension:    getExecutableExtension(),
-		OutFolder:    outputDir,
-		Logger:       io.Discard,
-		Timeout:      30 * time.Second,
+		Command:               "go",
+		MainFileRelativePath:  mainGoPath,
+		OutName:               "asyncraceapp",
+		Extension:             getExecutableExtension(),
+		OutFolderRelativePath: outputDir,
+		Logger:                io.Discard,
+		Timeout:               30 * time.Second,
 		Callback: func(err error) {
 			results <- err
 		},
