@@ -65,13 +65,13 @@ func main() {
 	}
 
 	config := &Config{
-		Command:               "go",
-		MainFileRelativePath:  mainGoPath,
-		OutName:               "testapp",
-		Extension:             getExecutableExtension(),
-		CompilingArguments:    dynamicArgsFunc,
-		OutFolderRelativePath: outputDir,
-		Timeout:               30 * time.Second,
+		Command:                   "go",
+		MainInputFileRelativePath: mainGoPath,
+		OutName:                   "testapp",
+		Extension:                 getExecutableExtension(),
+		CompilingArguments:        dynamicArgsFunc,
+		OutFolderRelativePath:     outputDir,
+		Timeout:                   30 * time.Second,
 	}
 
 	compiler := New(config)
@@ -146,11 +146,11 @@ func main() {
 // processed and added to ldflags in buildArguments method
 func TestCompilingArgumentsLdflagsProcessing(t *testing.T) {
 	config := &Config{
-		Command:               "go",
-		MainFileRelativePath:  "test.go",
-		OutName:               "test",
-		Extension:             "",
-		OutFolderRelativePath: "/tmp",
+		Command:                   "go",
+		MainInputFileRelativePath: "test.go",
+		OutName:                   "test",
+		Extension:                 "",
+		OutFolderRelativePath:     "/tmp",
 	}
 
 	compiler := New(config)

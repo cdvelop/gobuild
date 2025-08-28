@@ -8,11 +8,11 @@ import (
 
 func TestNew(t *testing.T) {
 	config := &Config{
-		Command:               "go",
-		MainFileRelativePath:  "main.go",
-		OutName:               "test",
-		Extension:             ".exe",
-		OutFolderRelativePath: "build",
+		Command:                   "go",
+		MainInputFileRelativePath: "main.go",
+		OutName:                   "test",
+		Extension:                 ".exe",
+		OutFolderRelativePath:     "build",
 	}
 	gb := New(config)
 
@@ -38,12 +38,12 @@ func TestNew(t *testing.T) {
 
 func TestNewWithCustomTimeout(t *testing.T) {
 	config := &Config{
-		Command:               "go",
-		MainFileRelativePath:  "main.go",
-		OutName:               "test",
-		Extension:             ".exe",
-		OutFolderRelativePath: "build",
-		Timeout:               10 * time.Second,
+		Command:                   "go",
+		MainInputFileRelativePath: "main.go",
+		OutName:                   "test",
+		Extension:                 ".exe",
+		OutFolderRelativePath:     "build",
+		Timeout:                   10 * time.Second,
 	}
 	gb := New(config)
 	if gb.config.Timeout != 10*time.Second {
@@ -54,13 +54,13 @@ func TestNewWithCustomTimeout(t *testing.T) {
 func TestCompileProgramSync(t *testing.T) {
 	var logOutput bytes.Buffer
 	config := &Config{
-		Command:               "echo", // Use echo command for testing
-		MainFileRelativePath:  "test",
-		OutName:               "test",
-		Extension:             "",
-		OutFolderRelativePath: ".",
-		Logger:                &logOutput,
-		Timeout:               1 * time.Second,
+		Command:                   "echo", // Use echo command for testing
+		MainInputFileRelativePath: "test",
+		OutName:                   "test",
+		Extension:                 "",
+		OutFolderRelativePath:     ".",
+		Logger:                    &logOutput,
+		Timeout:                   1 * time.Second,
 	}
 
 	gb := New(config)
@@ -80,13 +80,13 @@ func TestCompileProgramAsync(t *testing.T) {
 	callbackCalled := make(chan error, 1)
 
 	config := &Config{
-		Command:               "echo",
-		MainFileRelativePath:  "test",
-		OutName:               "test",
-		Extension:             "",
-		OutFolderRelativePath: ".",
-		Logger:                &logOutput,
-		Timeout:               1 * time.Second,
+		Command:                   "echo",
+		MainInputFileRelativePath: "test",
+		OutName:                   "test",
+		Extension:                 "",
+		OutFolderRelativePath:     ".",
+		Logger:                    &logOutput,
+		Timeout:                   1 * time.Second,
 		Callback: func(err error) {
 			callbackCalled <- err
 		},

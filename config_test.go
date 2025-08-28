@@ -11,13 +11,13 @@ func TestConfig(t *testing.T) {
 	callbackCalled := false
 
 	config := &Config{
-		Command:               "go",
-		MainFileRelativePath:  "web/main.go",
-		OutName:               "myapp",
-		Extension:             ".exe",
-		CompilingArguments:    func() []string { return []string{"-X", "main.version=v1.0.0"} },
-		OutFolderRelativePath: "dist",
-		Logger:                &logOutput,
+		Command:                   "go",
+		MainInputFileRelativePath: "web/main.go",
+		OutName:                   "myapp",
+		Extension:                 ".exe",
+		CompilingArguments:        func() []string { return []string{"-X", "main.version=v1.0.0"} },
+		OutFolderRelativePath:     "dist",
+		Logger:                    &logOutput,
 		Callback: func(err error) {
 			callbackCalled = true
 		},
@@ -28,8 +28,8 @@ func TestConfig(t *testing.T) {
 		t.Errorf("Expected Command to be 'go', got '%s'", config.Command)
 	}
 
-	if config.MainFileRelativePath != "web/main.go" {
-		t.Errorf("Expected MainFileRelativePath to be 'web/main.go', got '%s'", config.MainFileRelativePath)
+	if config.MainInputFileRelativePath != "web/main.go" {
+		t.Errorf("Expected MainInputFileRelativePath to be 'web/main.go', got '%s'", config.MainInputFileRelativePath)
 	}
 
 	if config.OutName != "myapp" {

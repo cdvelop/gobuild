@@ -83,6 +83,6 @@ func (h *GoBuild) buildArguments(tempFileName string) []string {
 		buildArgs = append(buildArgs, "-ldflags="+strings.Join(ldFlags, " "))
 	}
 
-	buildArgs = append(buildArgs, "-o", path.Join(h.config.OutFolderRelativePath, tempFileName), h.config.MainFileRelativePath)
+	buildArgs = append(buildArgs, "-o", path.Join(h.config.OutFolderRelativePath, tempFileName), h.config.MainInputFileRelativePath)
 	return buildArgs
 }

@@ -16,7 +16,7 @@ go get github.com/cdvelop/gobuild
 ```go
 type Config struct {
     Command               string          // "go" or "tinygo"
-    MainFileRelativePath  string          // relative Path to main.go
+    MainInputFileRelativePath  string          // relative Path to main.go
     OutName               string          // Output name (without extension)
     Extension             string          // ".exe", ".wasm", ""
     OutFolderRelativePath string          // relative Output directory
@@ -27,14 +27,14 @@ type Config struct {
     Env                   []string        // Environment variables (optional)
 }
 config := &Config{
-    Command:               "go",
-    MainFileRelativePath:  "server/main.go",
-    OutName:               "app",
-    Extension:             ".exe",
-    OutFolderRelativePath: "dist",
-    Logger:                os.Stdout,
-    Timeout:               5 * time.Second,
-    Env:                   []string{"GOOS=js", "GOARCH=wasm"}, // For WASM compilation
+    Command:                    "go",
+    MainInputFileRelativePath:  "server/main.go",
+    OutName:                    "app",
+    Extension:                  ".exe",
+    OutFolderRelativePath:      "dist",
+    Logger:                     os.Stdout,
+    Timeout:                    5 * time.Second,
+    Env:                        []string{"GOOS=js", "GOARCH=wasm"}, // For WASM compilation
 }
 
 compiler := gobuild.New(config)

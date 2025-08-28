@@ -148,7 +148,7 @@ func (h *GoBuild) MainOutputFileNameWithExtension() string {
 	return h.outFileName
 }
 
-// MainFileRelativePath eg: cmd/main.go
-func (h *GoBuild) MainFileRelativePath() string {
-	return h.config.MainFileRelativePath
+// MainInputFileRelativePath eg: cmd/main.go
+func (h *GoBuild) MainInputFileRelativePath() string {
+	return h.config.MainInputFileRelativePath
 }
