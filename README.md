@@ -81,4 +81,4 @@ if compiler.IsCompiling() {
 - **Context-aware**: Proper cancellation and timeout handling
 
 ---
-## [Contributing](docs/CONTRIBUTING.md)
+## [Contributing](https://github.com/cdvelop/cdvelop/blob/main/CONTRIBUTING.md)

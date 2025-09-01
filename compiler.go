@@ -31,14 +31,11 @@ func (h *GoBuild) compileSync(ctx context.Context, comp *compilation) error {
 
 	if err != nil {
 		// Emit a single log entry containing the error and the raw build output (no processing)
-		if h.config.Logger != nil {
-			if len(output) > 0 {
-				fmt.Fprintf(h.config.Logger, "%v build failed: %v\n%s\n", this, err, string(output))
-			} else {
-				fmt.Fprintf(h.config.Logger, "%v build failed: %v\n", this, err)
-			}
+		if len(output) > 0 {
+			fmt.Fprintf(h.config.Logger, "%v build failed: %v\n%s\n", this, err, string(output))
+		} else {
+			fmt.Fprintf(h.config.Logger, "%v build failed: %v\n", this, err)
 		}
-
 		// Clean up temporary file if compilation failed
 		h.cleanupTempFile(comp.tempFile)
 
