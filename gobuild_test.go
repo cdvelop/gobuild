@@ -2,6 +2,7 @@ package gobuild
 
 import (
 	"bytes"
+	"fmt"
 	"testing"
 	"time"
 )
@@ -53,13 +54,19 @@ func TestNewWithCustomTimeout(t *testing.T) {
 
 func TestCompileProgramSync(t *testing.T) {
 	var logOutput bytes.Buffer
+	logFunc := func(msgs ...any) {
+		for _, msg := range msgs {
+			logOutput.WriteString(fmt.Sprintf("%v", msg))
+		}
+		logOutput.WriteString("\n")
+	}
 	config := &Config{
 		Command:                   "echo", // Use echo command for testing
 		MainInputFileRelativePath: "test",
 		OutName:                   "test",
 		Extension:                 "",
 		OutFolderRelativePath:     ".",
-		Logger:                    &logOutput,
+		Logger:                    logFunc,
 		Timeout:                   1 * time.Second,
 	}
 
@@ -77,6 +84,12 @@ func TestCompileProgramSync(t *testing.T) {
 
 func TestCompileProgramAsync(t *testing.T) {
 	var logOutput bytes.Buffer
+	logFunc := func(msgs ...any) {
+		for _, msg := range msgs {
+			logOutput.WriteString(fmt.Sprintf("%v", msg))
+		}
+		logOutput.WriteString("\n")
+	}
 	callbackCalled := make(chan error, 1)
 
 	config := &Config{
@@ -85,7 +98,7 @@ func TestCompileProgramAsync(t *testing.T) {
 		OutName:                   "test",
 		Extension:                 "",
 		OutFolderRelativePath:     ".",
-		Logger:                    &logOutput,
+		Logger:                    logFunc,
 		Timeout:                   1 * time.Second,
 		Callback: func(err error) {
 			callbackCalled <- err

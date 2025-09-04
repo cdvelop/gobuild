@@ -2,12 +2,19 @@ package gobuild
 
 import (
 	"bytes"
+	"fmt"
 	"testing"
 	"time"
 )
 
 func TestConfig(t *testing.T) {
 	var logOutput bytes.Buffer
+	logFunc := func(msgs ...any) {
+		for _, msg := range msgs {
+			logOutput.WriteString(fmt.Sprintf("%v", msg))
+		}
+		logOutput.WriteString("\n")
+	}
 	callbackCalled := false
 
 	config := &Config{
@@ -17,7 +24,7 @@ func TestConfig(t *testing.T) {
 		Extension:                 ".exe",
 		CompilingArguments:        func() []string { return []string{"-X", "main.version=v1.0.0"} },
 		OutFolderRelativePath:     "dist",
-		Logger:                    &logOutput,
+		Logger:                    logFunc,
 		Callback: func(err error) {
 			callbackCalled = true
 		},
@@ -44,8 +51,8 @@ func TestConfig(t *testing.T) {
 		t.Errorf("Expected OutFolderRelativePath to be 'dist', got '%s'", config.OutFolderRelativePath)
 	}
 
-	if config.Logger != &logOutput {
-		t.Error("Writer not properly assigned")
+	if config.Logger == nil {
+		t.Error("Logger should not be nil")
 	}
 
 	if config.Callback == nil {

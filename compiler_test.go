@@ -2,6 +2,7 @@ package gobuild
 
 import (
 	"bytes"
+	"fmt"
 	"testing"
 )
 
@@ -71,13 +72,19 @@ func TestBuildArguments(t *testing.T) {
 
 func TestCompileSyncWithInvalidCommand(t *testing.T) {
 	var logOutput bytes.Buffer
+	logFunc := func(msgs ...any) {
+		for _, msg := range msgs {
+			logOutput.WriteString(fmt.Sprintf("%v", msg))
+		}
+		logOutput.WriteString("\n")
+	}
 	config := &Config{
 		Command:                   "nonexistentcommand",
 		MainInputFileRelativePath: "main.go",
 		OutName:                   "test",
 		Extension:                 ".exe",
 		OutFolderRelativePath:     "build",
-		Logger:                    &logOutput,
+		Logger:                    logFunc,
 	}
 	gb := New(config)
 	err := gb.CompileProgram()

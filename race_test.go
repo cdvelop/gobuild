@@ -1,7 +1,6 @@
 package gobuild
 
 import (
-	"io"
 	"os"
 	"path/filepath"
 	"sync"
@@ -42,7 +41,7 @@ func main() {
 		OutName:                   "raceapp",
 		Extension:                 getExecutableExtension(),
 		OutFolderRelativePath:     outputDir,
-		Logger:                    io.Discard,
+		Logger:                    func(...any) {}, // no-op logger
 		Timeout:                   30 * time.Second,
 	}
 
@@ -129,7 +128,7 @@ func main() {
 		OutName:                   "cancelapp",
 		Extension:                 getExecutableExtension(),
 		OutFolderRelativePath:     outputDir,
-		Logger:                    io.Discard,
+		Logger:                    func(...any) {}, // no-op logger
 		Timeout:                   30 * time.Second,
 	}
 
@@ -197,7 +196,7 @@ func main() {
 		OutName:                   "stateapp",
 		Extension:                 getExecutableExtension(),
 		OutFolderRelativePath:     outputDir,
-		Logger:                    io.Discard,
+		Logger:                    func(...any) {}, // no-op logger
 		Timeout:                   30 * time.Second,
 	}
 
@@ -267,7 +266,7 @@ func main() {
 		OutName:                   "asyncraceapp",
 		Extension:                 getExecutableExtension(),
 		OutFolderRelativePath:     outputDir,
-		Logger:                    io.Discard,
+		Logger:                    func(...any) {}, // no-op logger
 		Timeout:                   30 * time.Second,
 		Callback: func(err error) {
 			results <- err

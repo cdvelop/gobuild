@@ -2,7 +2,6 @@ package gobuild
 
 import (
 	"errors"
-	"fmt"
 	"os"
 	"path"
 )
@@ -25,7 +24,9 @@ func (h *GoBuild) renameOutputFile(tempFileName string) error {
 
 	err := os.Rename(tempPath, finalPath)
 	if err != nil {
-		fmt.Fprintf(h.config.Logger, "Rename failed: %v\n", err)
+		if h.config.Logger != nil {
+			h.config.Logger("Rename failed:", err)
+		}
 		return errors.Join(errors.New("renameOutputFile"), err)
 	}
 
