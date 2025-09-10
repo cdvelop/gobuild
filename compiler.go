@@ -38,9 +38,16 @@ func (h *GoBuild) compileSync(ctx context.Context, comp *compilation) error {
 				errMsg += "\n" + string(output) + "\n"
 			}
 
-			if strings.Contains(errMsg, "signal: killed") && !h.firstStart {
+			// Access and possibly modify firstStart under mutex to avoid races
+			h.mu.Lock()
+			firstStart := h.firstStart
+			if strings.Contains(errMsg, "signal: killed") && !firstStart {
+				// mark firstStart true while holding the lock
 				h.firstStart = true // Avoid repeating this message
+				h.mu.Unlock()
+				// do not log the message on firstStart transition
 			} else {
+				h.mu.Unlock()
 				h.config.Logger(errMsg)
 			}
 
