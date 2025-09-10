@@ -31,32 +31,22 @@ func (h *GoBuild) compileSync(ctx context.Context, comp *compilation) error {
 
 	if err != nil {
 		// Emit a single log entry containing the error and the raw build output (no processing)
-		if h.config.Logger != nil {
-			errMsg := fmt.Sprintf("%v build failed: %v", e, err)
+		errMsg := fmt.Sprintf("%v build failed: %v", e, err)
 
-			if len(output) > 0 {
-				errMsg += "\n" + string(output) + "\n"
-			}
-
-			// Access and possibly modify firstStart under mutex to avoid races
-			h.mu.Lock()
-			firstStart := h.firstStart
-			if strings.Contains(errMsg, "signal: killed") && !firstStart {
-				// mark firstStart true while holding the lock
-				h.firstStart = true // Avoid repeating this message
-				h.mu.Unlock()
-				// do not log the message on firstStart transition
-			} else {
-				h.mu.Unlock()
-				h.config.Logger(errMsg)
-			}
-
+		if len(output) > 0 {
+			errMsg += " " + string(output)
 		}
 		// Clean up temporary file if compilation failed
 		h.cleanupTempFile(comp.tempFile)
 
-		// Return an error that contains both the original error and the raw build output
-		return errors.Join(e, fmt.Errorf("%v: %s", err, strings.TrimSpace(string(output))))
+		// Always return an error when the build process reports an error.
+		// Previously, "signal: killed" (from context timeout/cancel) was treated
+		// as success (returning nil), which caused callers to assume compilation
+		// succeeded while the temp file had been removed. That led to test
+		// failures where compilation appeared successful but the final binary
+		// was missing. Returning the error here ensures callers handle timeouts
+		// and cancellations as failures and the test paths behave correctly.
+		return errors.New(errMsg)
 	}
 
 	// fmt.Fprintf(h.config.Logger, "Compilation successful, renaming %s\n", comp.tempFile)

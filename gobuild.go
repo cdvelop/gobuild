@@ -27,7 +27,6 @@ type GoBuild struct {
 	outFileName     string // eg: main.exe, app
 	outTempFileName string // eg: app_temp.exe
 
-	firstStart bool // true if the first compilation has been done
 }
 
 // New creates a new GoBuild instance with the given configuration
@@ -41,7 +40,6 @@ func New(c *Config) *GoBuild {
 		config:          c,
 		outFileName:     c.OutName + c.Extension,
 		outTempFileName: c.OutName + "_temp" + c.Extension,
-		firstStart:      false,
 	}
 }
 

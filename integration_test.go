@@ -148,6 +148,7 @@ func main() {
 		OutName:                   "testapp",
 		Extension:                 getExecutableExtension(),
 		OutFolderRelativePath:     outputDir,
+		Logger:                    func(messages ...any) { fmt.Println(messages...) },
 		Timeout:                   30 * time.Second,
 	}
 
@@ -263,6 +264,7 @@ func main() {
 		OutName:                   "asyncapp",
 		Extension:                 getExecutableExtension(),
 		OutFolderRelativePath:     outputDir,
+		Logger:                    func(messages ...any) { fmt.Println(messages...) },
 		Timeout:                   30 * time.Second,
 		Callback: func(err error) {
 			done <- err
@@ -360,6 +362,7 @@ func main() {
 		OutName:                   "errorapp",
 		Extension:                 getExecutableExtension(),
 		OutFolderRelativePath:     outputDir,
+		Logger:                    func(messages ...any) { fmt.Println(messages...) },
 		Timeout:                   30 * time.Second,
 	}
 
@@ -421,6 +424,7 @@ func main() {
 		OutName:                   "quickapp",
 		Extension:                 getExecutableExtension(),
 		OutFolderRelativePath:     outputDir,
+		Logger:                    func(messages ...any) { fmt.Println(messages...) },
 		Timeout:                   100 * time.Millisecond, // Very short timeout to test timeout handling
 	}
 
@@ -477,6 +481,7 @@ func TestIntegrationMultipleSuccessiveCompilations(t *testing.T) {
 		OutName:                   "successiveapp",
 		Extension:                 getExecutableExtension(),
 		OutFolderRelativePath:     outputDir,
+		Logger:                    func(messages ...any) { fmt.Println(messages...) },
 		Timeout:                   30 * time.Second,
 	}
 
@@ -612,6 +617,7 @@ func main() {
 		OutName:                   "myapp",
 		Extension:                 getExecutableExtension(),
 		OutFolderRelativePath:     outputDir,
+		Logger:                    func(messages ...any) { fmt.Println(messages...) },
 		Timeout:                   30 * time.Second,
 	}
 
@@ -739,6 +745,7 @@ func main() {
 		OutName:                   "errorapp",
 		Extension:                 getExecutableExtension(),
 		OutFolderRelativePath:     outputDir,
+		Logger:                    func(messages ...any) { fmt.Println(messages...) },
 		Timeout:                   30 * time.Second,
 	}
 
