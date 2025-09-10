@@ -12,7 +12,7 @@ import (
 
 // compileSync performs the actual compilation synchronously with context timeout
 func (h *GoBuild) compileSync(ctx context.Context, comp *compilation) error {
-	var this = errors.New("compileSync")
+	var e = errors.New("compileSync")
 
 	buildArgs := h.buildArguments(comp.tempFile)
 
@@ -32,17 +32,24 @@ func (h *GoBuild) compileSync(ctx context.Context, comp *compilation) error {
 	if err != nil {
 		// Emit a single log entry containing the error and the raw build output (no processing)
 		if h.config.Logger != nil {
+			errMsg := fmt.Sprintf("%v build failed: %v", e, err)
+
 			if len(output) > 0 {
-				h.config.Logger(this, "build failed:", err, "\n"+string(output)+"\n")
-			} else {
-				h.config.Logger(this, "build failed:", err)
+				errMsg += "\n" + string(output) + "\n"
 			}
+
+			if strings.Contains(errMsg, "signal: killed") && !h.firstStart {
+				h.firstStart = true // Avoid repeating this message
+			} else {
+				h.config.Logger(errMsg)
+			}
+
 		}
 		// Clean up temporary file if compilation failed
 		h.cleanupTempFile(comp.tempFile)
 
 		// Return an error that contains both the original error and the raw build output
-		return errors.Join(this, fmt.Errorf("%v: %s", err, strings.TrimSpace(string(output))))
+		return errors.Join(e, fmt.Errorf("%v: %s", err, strings.TrimSpace(string(output))))
 	}
 
 	// fmt.Fprintf(h.config.Logger, "Compilation successful, renaming %s\n", comp.tempFile)
