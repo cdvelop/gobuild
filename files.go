@@ -18,7 +18,7 @@ func (h *GoBuild) UnobservedFiles() []string {
 // renameOutputFile renames the temporary output file to the final output file
 func (h *GoBuild) renameOutputFile(tempFileName string) error {
 	tempPath := path.Join(h.config.OutFolderRelativePath, tempFileName)
-	finalPath := path.Join(h.config.OutFolderRelativePath, h.outFileName)
+	finalPath := h.FinalOutputPath()
 
 	// fmt.Fprintf(h.config.Logger, "Renaming %s to %s\n", tempPath, finalPath)
 

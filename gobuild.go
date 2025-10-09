@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"os/exec"
+	"path"
 	"sync"
 	"time"
 )
@@ -152,4 +153,10 @@ func (h *GoBuild) MainOutputFileNameWithExtension() string {
 // MainInputFileRelativePath eg: cmd/main.go
 func (h *GoBuild) MainInputFileRelativePath() string {
 	return h.config.MainInputFileRelativePath
+}
+
+// FinalOutputPath returns the full path to the final output file
+// eg: web/build/main.wasm
+func (h *GoBuild) FinalOutputPath() string {
+	return path.Join(h.config.OutFolderRelativePath, h.outFileName)
 }
