@@ -1,3 +1,3 @@
-module github.com/cdvelop/gobuild
+module github.com/tinywasm/gobuild
 
 go 1.22.0
